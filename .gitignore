@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Tanuj.BookStore/.vs/Tanuj.BookStore
+/Tanuj.BookStore/Tanuj.BookStore/bin/Debug/netcoreapp3.1
+/Tanuj.BookStore/Tanuj.BookStore/obj
