@@ -14,11 +14,15 @@ namespace Tanuj.BookStore
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+       
+        // For adding dependencies and services
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();  // adding mvc design pattern
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // For http pipeline
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -26,15 +30,36 @@ namespace Tanuj.BookStore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
+          
+
+
+            //map a particular url to a resource
+               app.UseRouting();
+
+            // maping a usl to a particular resource 
+               app.UseEndpoints(endpoints =>
+               {
+                  /* endpoints.Map("/", async context =>
+                   {
+                       await context.Response.WriteAsync("Hello World!");
+                   });
+
+                   */
+
+                   endpoints.MapDefaultControllerRoute();
+               });
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                /*  endpoints.Map("/Tanuj", async context =>
+                  {
+                      await context.Response.WriteAsync("Hello Tanuj!");
+                  });
+                */
+
+                
             });
+
         }
     }
 }
