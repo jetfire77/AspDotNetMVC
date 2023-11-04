@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,8 +32,16 @@ namespace Tanuj.BookStore
                 app.UseDeveloperExceptionPage();
             }
 
-          
+            app.UseStaticFiles();  // middleware
 
+            
+            // to use static files other than from wwwroot
+          /*  app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory() , "MyStaticFiles")),
+                RequestPath = "/MyStaticFiles"
+            });
+          */
 
             //map a particular url to a resource
                app.UseRouting();
@@ -49,16 +59,20 @@ namespace Tanuj.BookStore
                    endpoints.MapDefaultControllerRoute();
                });
 
+           /* 
+            
             app.UseEndpoints(endpoints =>
             {
-                /*  endpoints.Map("/Tanuj", async context =>
+                  endpoints.Map("/Tanuj", async context =>
                   {
                       await context.Response.WriteAsync("Hello Tanuj!");
                   });
-                */
+                
 
                 
             });
+
+            */
 
         }
     }

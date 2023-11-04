@@ -5,9 +5,21 @@ namespace Tanuj.BookStore.Controllers
     public class HomeController : Controller
     {
 
-        public string Index()
+        public ViewResult Index()
         {
-            return "Tanuj ki BookStore";
+
+            var obj = new { id = 1, Name="tanuj" };
+            return  View(obj);
+        }
+
+        public ViewResult AboutUs() {
+        
+        return View();
+        }
+
+        public ViewResult ContactUs()
+        {
+            return View();
         }
     }
 }
