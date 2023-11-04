@@ -6,3 +6,6 @@
 /Tanuj.BookStore/.vs/Tanuj.BookStore
 /Tanuj.BookStore/Tanuj.BookStore/bin/Debug/netcoreapp3.1
 /Tanuj.BookStore/Tanuj.BookStore/obj
+/Tanuj.BookStore/Tanuj.BookStore/wwwroot/css
+/Tanuj.BookStore/Tanuj.BookStore/wwwroot/lib
+/Tanuj.BookStore/Tanuj.BookStore/MyStaticFiles
