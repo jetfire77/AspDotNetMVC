@@ -21,6 +21,13 @@ namespace Tanuj.BookStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();  // adding mvc design pattern
+
+
+// preprocessor directive 
+#if DEBUG
+            services.AddRazorPages().AddRazorRuntimeCompilation();  // so that we dont have to run again and again after every edit
+#endif
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
