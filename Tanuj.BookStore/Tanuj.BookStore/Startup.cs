@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -8,7 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Tanuj.BookStore.Data;
+using Tanuj.BookStore.Repository;
 
 namespace Tanuj.BookStore
 {
@@ -20,6 +24,10 @@ namespace Tanuj.BookStore
         // For adding dependencies and services
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<BookStoreContext>(options => options.UseSqlServer("Server=.;Database=BookStore1;Integrated Security=True;"));
+           
+            
             services.AddControllersWithViews();  // adding mvc design pattern
 
 
@@ -27,7 +35,7 @@ namespace Tanuj.BookStore
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();  // so that we dont have to run again and again after every edit
 #endif
-
+            services.AddScoped<BookRepository, BookRepository>();  // for dependency injection
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,14 +64,21 @@ namespace Tanuj.BookStore
             // maping a usl to a particular resource 
                app.UseEndpoints(endpoints =>
                {
-                  /* endpoints.Map("/", async context =>
-                   {
-                       await context.Response.WriteAsync("Hello World!");
-                   });
+                   /* endpoints.Map("/", async context =>
+                    {
+                        await context.Response.WriteAsync("Hello World!");
+                    });
 
-                   */
+                    */
 
                    endpoints.MapDefaultControllerRoute();
+
+                   /* 
+                    *  endpoints.MapControllerRoute(
+                       name: "Default",
+                       pattern: "bookApp/{controller=Home}/{action=Index}/{id?}");
+                   */
+
                });
 
            /* 

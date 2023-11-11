@@ -1,19 +1,44 @@
 ﻿
+@*
 @{
-    dynamic data = ViewBag.Data;
+    dynamic data = ViewBag.Data ;
 
-   
+
+}
+
+
+
+
+@{
+    var bookInfo = ViewData["book"]  as BookModel;
+
+}
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+*@
+
+@{
+
+    var book = ViewData["Book"] as BookModel;
 }
 
 
 <section class="jumbotron text-center">
     <div class="container">
-        <h1>Welcome to Tanuj ki Bookstore @ViewBag.Title</h1>
+        <h1>Welcome to Tanuj ki Bookstore @ViewData["CustomProperty"]</h1>
+
+       <!--
+           <environment  names="Development"> <h3>development </h3> </environment>
+        <environment names="Production, Staging"> <h3>production </h3> </environment>
+         -->
+        <h1> Id= @book.Id </h1>
+        <h1> title= @book.Title </h1>
+     
         <p class="lead text-muted">
-            <!--  @ViewBag.Data               learning about viewBag-->
-           @data.id @data.name <br/>
-            id = @ViewBag.Type.Id <br />
-            name = @ViewBag.Type.Author </br>
+          
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
             quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </p>

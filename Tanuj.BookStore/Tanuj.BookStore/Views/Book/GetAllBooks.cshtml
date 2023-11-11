@@ -1,7 +1,14 @@
 ﻿ 
-
+@*  
 
 @model IEnumerable<BookModel>   // to use the BookModel IEnumerable because we want list
+
+ *@
+
+@{
+    ViewData["Title"] = "All Books";
+
+}
 
 
 
@@ -41,7 +48,10 @@
                             <div class="btn-group">
 
                                 <!--accessing particular book form get all books page-->
-                                <a href="/book/getbook/@book.Id" class="btn btn-sm btn-outline-secondary">View details</a>
+                                <!--   <a  href="/book/getbook/book.Id" class="btn btn-sm btn-outline-secondary">View details</a> -->
+                                <a asp-route="bookDetailsRoute" asp-route-id="@book.Id"
+                                 
+                                    class="btn btn-sm btn-outline-secondary">View details</a> <!--using anchor tag helper-->
                             </div>
                             <small class="text-muted">@book.Author</small>
                         </div>

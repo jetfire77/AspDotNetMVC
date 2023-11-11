@@ -1,11 +1,16 @@
 ﻿
-@model BookModel;
+@*
+    @model BookModel;   // now after commenting it @Model.Title @Model.Description @Model.Author and all are still assessing them dynamically 
+*@
 
+@{
+    ViewData["Title"] = "Book detail " + Model.Title ;
 
+}
 
 
 <div class="container">
-    <h3 class="display-4">Book Details</h3>
+    <h3 class="display-4">Book Details </h3>
 
     <div class="row">
 
@@ -91,7 +96,7 @@
 
     <hr />
 
-    <div class="py-5 bg-light">
+     <div class="py-5 bg-light" id="similarBooks">
         <h3 class="h3">Similar books</h3>
         <div class="row">
             @for (int i = 0; i < 5; i++)
@@ -115,5 +120,7 @@
 
         </div>
     </div>
+
+    
 
 </div>
