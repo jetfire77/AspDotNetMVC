@@ -21,17 +21,29 @@ namespace Tanuj.BookStore.Repository
             var newBook = new Books()
             {
                 Title = model.Title,
+                
                 Author = model.Author,
                 Description = model.Description,
                 Image = model.Image,
                 Category = model.Category,
-                Language = model.Language,
-                TotalPages = model.TotalPages,
-
+                LanguageId = model.LanguageId,
+                TotalPages = model.TotalPages.HasValue ? model.TotalPages.Value: 0,
+                CoverImageUrl= model.CoverImageUrl
 
             };
+            newBook.bookGallery = new List<BookGallery>();   // database
+            
+            foreach (var file in model.Gallery)          // url of many images in code i.e from input 
+            {
+                newBook.bookGallery.Add(new BookGallery()  // adding to database
+                {
+                    Name = file.Name,      
+                    URL = file.URL
 
-           await _context.Books.AddAsync(newBook);
+                });
+            }
+
+           await _context.Books.AddAsync(newBook);  // adding to database
             await _context.SaveChangesAsync();
 
             return newBook.Id;
@@ -39,25 +51,27 @@ namespace Tanuj.BookStore.Repository
         }
 
         public async Task<List<BookModel>> GetAllBooks()
-        {   var books = new List<BookModel>();
-            var allbooks = await _context.Books.ToListAsync();
-            if(allbooks?.Any() == true) { 
-                foreach(var book in allbooks) {
-                    books.Add(new BookModel()
-                    {
-                        Author = book.Author,
-                        Description = book.Description,
-                        Image = book.Image,
-                        Category = book.Category,
-                        Language = book.Language,
-                        TotalPages = book.TotalPages,
-                        Id = book.Id,
-                        Title = book.Title
+        {   
 
-                    });
-                }
-            }
-            return books;
+            return await _context.Books
+                .Select(book => new BookModel()
+                {
+
+                    Author = book.Author,
+                    Description = book.Description,
+                    Image = book.Image,
+                    Category = book.Category,
+                    LanguageId = book.LanguageId,
+                    Language = book.Language.Name,   // from book table going to language table and getting name
+                    TotalPages = book.TotalPages,
+                    Id = book.Id,
+                    Title = book.Title,
+                    CoverImageUrl = book.CoverImageUrl
+
+
+
+                }).ToListAsync();
+           
         }
 
         public  async Task<BookModel> GetBookById(int id) {
@@ -67,34 +81,43 @@ namespace Tanuj.BookStore.Repository
 
 
             // to get book  from database
-            var book = await _context.Books.FindAsync(id);
-           if(book != null)
-            {
-                var bookDetails = new BookModel()
+           return await _context.Books.Where(x => x.Id == id)
+                .Select(book => new BookModel()
                 {
                     Author = book.Author,
                     Description = book.Description,
                     Image = book.Image,
                     Category = book.Category,
-                    Language = book.Language,
+                    LanguageId = book.LanguageId,
+                    Language = book.Language.Name,
                     TotalPages = book.TotalPages,
                     Id = book.Id,
-                    Title = book.Title
-                };
-                return bookDetails;
-            }
-           return null;
+                    Title = book.Title,
+                    CoverImageUrl = book.CoverImageUrl,
+                    Gallery = book.bookGallery.Select(g => new GalleryModel()
+                    {
+                        Id = g.Id,
+                        Name = g.Name,
+                        URL = g.URL
+
+
+                    }).ToList()
+                }).FirstOrDefaultAsync();
+          
+     
 
         }
 
 
         public List<BookModel> SearchBook(string title, string authorName)
-        {   
-            // linq query
-            return DataSource().Where(x=> x.Title.Contains(title)  && x.Author.Contains(authorName)).ToList();
-        
+        {
+            // linq query to reterive hardcoded data
+            // return DataSource().Where(x=> x.Title.Contains(title)  && x.Author.Contains(authorName)).ToList();
+            return null;
         }
 
+
+        /*
         private List<BookModel> DataSource()
         {
             return new List<BookModel>()
@@ -112,5 +135,7 @@ namespace Tanuj.BookStore.Repository
                   new BookModel() {Id = 6, Title="Data Structures and Algorithms Made Easy (2012)", Author=" Narasimha Karumanchi",Category= "Computer Science", Language="English" , TotalPages= 453, Description="Narasimha Karumanchi is the founder of CareerMonk and author of few books on data structures, algorithms, and design patterns. He was a software developer who has been both interviewer and interviewee over his long career. Most recently he worked for Amazon Corporation, IBM labs, Mentor Graphics, and Microsoft. He filed patents which are under processing. He authored the following books which got translated to international languages: Chinese, Japanese, Korea and Taiwan. Also, around 58 international universities were using these books as reference for academic courses. Data Structures and Algorithms Made Easy Data Structures and Algorithms Made Easy in Java Elements of Computer Networking Data Structures and Algorithms Made Easy for GATE Peeling Design Patterns Coding Interview Questions Narasimha held M.Tech. in computer science from IIT, Bombay, after finishing his B.Tech. from JNT university. He has also taught data structures and algorithms at various training institutes and colleges." }
             };
         }
+
+        */
     }
 }

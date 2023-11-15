@@ -1,4 +1,7 @@
-﻿namespace Tanuj.BookStore.Data
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace Tanuj.BookStore.Data
 {
 
     // this class because we are using code first apporach 
@@ -21,8 +24,17 @@
 
         public string Category { get; set; }
 
-        public string Language { get; set; }
+        public int LanguageId { get; set; }
 
         public int TotalPages { get; set; }
+
+        public Language Language { get; set; }    // relation between Language table and book table
+
+
+        public string CoverImageUrl { get; set; }  
+
+        public ICollection<BookGallery> bookGallery { get; set; }   //by this we have created 1 to many relationship betweem books and bookgallery table
+
+
     }
 }
