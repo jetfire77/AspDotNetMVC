@@ -66,6 +66,14 @@ namespace Tanuj.BookStore.Models
         public IFormFileCollection GalleryFiles { get; set; }   // can also use list<IFormFile> or IEnumerable<IFormFile> 
                                                                 // lists of book images
 
-        public List<GalleryModel> Gallery { get; set; } 
+        public List<GalleryModel> Gallery { get; set; }     // urls of images 
+
+
+
+        [Display(Name = "Upload your book in pdf format")]
+        [Required]
+        public IFormFile BookPdf { get; set; }   // pdf
+
+        public string BookPdfUrl { get; set; }   // pdf
     }
 }

@@ -36,5 +36,7 @@ namespace Tanuj.BookStore.Data
         public ICollection<BookGallery> bookGallery { get; set; }   //by this we have created 1 to many relationship betweem books and bookgallery table
 
 
+        public string BookPdfUrl { get; set; }  
+
     }
 }

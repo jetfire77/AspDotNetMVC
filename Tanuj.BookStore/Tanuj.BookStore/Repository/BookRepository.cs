@@ -28,7 +28,8 @@ namespace Tanuj.BookStore.Repository
                 Category = model.Category,
                 LanguageId = model.LanguageId,
                 TotalPages = model.TotalPages.HasValue ? model.TotalPages.Value: 0,
-                CoverImageUrl= model.CoverImageUrl
+                CoverImageUrl= model.CoverImageUrl,
+                BookPdfUrl = model.BookPdfUrl
 
             };
             newBook.bookGallery = new List<BookGallery>();   // database
@@ -101,7 +102,9 @@ namespace Tanuj.BookStore.Repository
                         URL = g.URL
 
 
-                    }).ToList()
+                    }).ToList(),
+                    BookPdfUrl = book.BookPdfUrl
+
                 }).FirstOrDefaultAsync();
           
      
