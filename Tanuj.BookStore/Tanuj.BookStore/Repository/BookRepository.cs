@@ -120,6 +120,31 @@ namespace Tanuj.BookStore.Repository
         }
 
 
+        public async Task<List<BookModel>> GetTopBooksAsync(int count)
+        {
+
+            return await _context.Books
+                .Select(book => new BookModel()
+                {
+
+                    Author = book.Author,
+                    Description = book.Description,
+                    Image = book.Image,
+                    Category = book.Category,
+                    LanguageId = book.LanguageId,
+                    Language = book.Language.Name,   // from book table going to language table and getting name
+                    TotalPages = book.TotalPages,
+                    Id = book.Id,
+                    Title = book.Title,
+                    CoverImageUrl = book.CoverImageUrl
+
+
+
+                }).Take(count).ToListAsync();
+
+        }
+
+
         /*
         private List<BookModel> DataSource()
         {

@@ -65,7 +65,7 @@ namespace Tanuj.BookStore
           */
 
             //map a particular url to a resource
-               app.UseRouting();
+               app.UseRouting();   
 
             // maping a usl to a particular resource 
                app.UseEndpoints(endpoints =>
@@ -79,11 +79,11 @@ namespace Tanuj.BookStore
 
                    endpoints.MapDefaultControllerRoute();
 
-                   /* 
-                    *  endpoints.MapControllerRoute(
-                       name: "Default",
-                       pattern: "bookApp/{controller=Home}/{action=Index}/{id?}");
-                   */
+
+                   //endpoints.MapControllerRoute(
+                   //   name: "Default",
+                   //   pattern: "bookApp/{controller=Home}/{action=Index}/{id?}");
+
 
                });
 
