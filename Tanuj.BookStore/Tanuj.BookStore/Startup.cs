@@ -38,7 +38,17 @@ namespace Tanuj.BookStore
             services.AddDbContext<BookStoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));  // getting connection string from appsetting.json
 
 
-            services.AddIdentity<IdentityUser, IdentityRole >().AddEntityFrameworkStores<BookStoreContext>();  // configuring identity core framework to work with database
+            services.AddIdentity<ApplicationUser, IdentityRole >().AddEntityFrameworkStores<BookStoreContext>();  // configuring identity core framework to work with database
+
+            services.Configure<IdentityOptions>(options =>    // customizing the default settings of  identity framewoork 
+            {
+                options.Password.RequiredLength = 5;
+                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            });
 
             services.AddControllersWithViews();  // adding mvc design pattern
 

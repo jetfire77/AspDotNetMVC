@@ -42,5 +42,45 @@ namespace Tanuj.BookStore.Controllers
             }
             return View();
         }
+
+
+        [Route("login")]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+
+        [Route("login")]
+        [HttpPost]
+        public async Task<IActionResult> Login(SignInModel signInModel)
+        {
+            if (ModelState.IsValid)
+            {
+
+              var result =  await _accountRepository.PasswordSignInAsync(signInModel);
+                if (result.Succeeded)
+                {
+
+                    return RedirectToAction("Index", "Home" ); // if result is successfull than redirect to idex page of home controller
+
+                }
+
+                ModelState.AddModelError("", "Invalid credentials");
+
+            }
+            return View();
+        }
+
+
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _accountRepository.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+
+
     }
 }

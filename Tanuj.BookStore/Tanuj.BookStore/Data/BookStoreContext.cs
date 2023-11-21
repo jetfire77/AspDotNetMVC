@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Tanuj.BookStore.Models;
 
 namespace Tanuj.BookStore.Data
 {
     //public class BookStoreContext: DbContext
-         public class BookStoreContext : IdentityDbContext   // to work with indentity core framework
+         public class BookStoreContext : IdentityDbContext<ApplicationUser>   // to work with indentity core framework
     {
 
 
