@@ -15,11 +15,11 @@ namespace Tanuj.BookStore.Controllers
 {
     public class BookController : Controller
     {
-        private readonly BookRepository _bookRepository = null;
-        private readonly LanguageRepository _languageRepository = null;
+        private readonly IBookRepository _bookRepository = null;
+        private readonly ILanguageRepository _languageRepository = null;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public BookController(BookRepository bookRepository, LanguageRepository languageRepository 
+        public BookController(IBookRepository bookRepository, ILanguageRepository languageRepository 
             
             ,IWebHostEnvironment webHostEnvironment)
         {
@@ -69,7 +69,7 @@ namespace Tanuj.BookStore.Controllers
             };
 
 
-            ViewBag.Language = new SelectList( await _languageRepository.GetLanguages(), "Id","Name");
+           
 
             /*  ViewBag.Language = new List<SelectListItem>()
               {
@@ -180,8 +180,7 @@ namespace Tanuj.BookStore.Controllers
             */
 
 
-            ViewBag.Language = new SelectList(await _languageRepository.GetLanguages(), "Id", "Name");
-
+           
 
             return View(); 
         }

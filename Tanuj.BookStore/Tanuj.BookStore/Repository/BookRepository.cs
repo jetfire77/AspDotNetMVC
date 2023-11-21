@@ -7,7 +7,7 @@ using Tanuj.BookStore.Models;
 
 namespace Tanuj.BookStore.Repository
 {
-    public class BookRepository
+    public class BookRepository : IBookRepository
     {
         private readonly BookStoreContext _context = null;
 
@@ -21,30 +21,30 @@ namespace Tanuj.BookStore.Repository
             var newBook = new Books()
             {
                 Title = model.Title,
-                
+
                 Author = model.Author,
                 Description = model.Description,
                 Image = model.Image,
                 Category = model.Category,
                 LanguageId = model.LanguageId,
-                TotalPages = model.TotalPages.HasValue ? model.TotalPages.Value: 0,
-                CoverImageUrl= model.CoverImageUrl,
+                TotalPages = model.TotalPages.HasValue ? model.TotalPages.Value : 0,
+                CoverImageUrl = model.CoverImageUrl,
                 BookPdfUrl = model.BookPdfUrl
 
             };
             newBook.bookGallery = new List<BookGallery>();   // database
-            
+
             foreach (var file in model.Gallery)          // url of many images in code i.e from input 
             {
                 newBook.bookGallery.Add(new BookGallery()  // adding to database
                 {
-                    Name = file.Name,      
+                    Name = file.Name,
                     URL = file.URL
 
                 });
             }
 
-           await _context.Books.AddAsync(newBook);  // adding to database
+            await _context.Books.AddAsync(newBook);  // adding to database
             await _context.SaveChangesAsync();
 
             return newBook.Id;
@@ -52,7 +52,7 @@ namespace Tanuj.BookStore.Repository
         }
 
         public async Task<List<BookModel>> GetAllBooks()
-        {   
+        {
 
             return await _context.Books
                 .Select(book => new BookModel()
@@ -72,42 +72,43 @@ namespace Tanuj.BookStore.Repository
 
 
                 }).ToListAsync();
-           
+
         }
 
-        public  async Task<BookModel> GetBookById(int id) {
+        public async Task<BookModel> GetBookById(int id)
+        {
 
             // linq query
             // return DataSource().Where(x => x.Id == id).FirstOrDefault();
 
 
             // to get book  from database
-           return await _context.Books.Where(x => x.Id == id)
-                .Select(book => new BookModel()
-                {
-                    Author = book.Author,
-                    Description = book.Description,
-                    Image = book.Image,
-                    Category = book.Category,
-                    LanguageId = book.LanguageId,
-                    Language = book.Language.Name,
-                    TotalPages = book.TotalPages,
-                    Id = book.Id,
-                    Title = book.Title,
-                    CoverImageUrl = book.CoverImageUrl,
-                    Gallery = book.bookGallery.Select(g => new GalleryModel()
-                    {
-                        Id = g.Id,
-                        Name = g.Name,
-                        URL = g.URL
+            return await _context.Books.Where(x => x.Id == id)
+                 .Select(book => new BookModel()
+                 {
+                     Author = book.Author,
+                     Description = book.Description,
+                     Image = book.Image,
+                     Category = book.Category,
+                     LanguageId = book.LanguageId,
+                     Language = book.Language.Name,
+                     TotalPages = book.TotalPages,
+                     Id = book.Id,
+                     Title = book.Title,
+                     CoverImageUrl = book.CoverImageUrl,
+                     Gallery = book.bookGallery.Select(g => new GalleryModel()
+                     {
+                         Id = g.Id,
+                         Name = g.Name,
+                         URL = g.URL
 
 
-                    }).ToList(),
-                    BookPdfUrl = book.BookPdfUrl
+                     }).ToList(),
+                     BookPdfUrl = book.BookPdfUrl
 
-                }).FirstOrDefaultAsync();
-          
-     
+                 }).FirstOrDefaultAsync();
+
+
 
         }
 
@@ -142,6 +143,12 @@ namespace Tanuj.BookStore.Repository
 
                 }).Take(count).ToListAsync();
 
+        }
+
+
+        public string GetAppName()
+        {
+            return "BookWanderer";
         }
 
 

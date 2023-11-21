@@ -25,6 +25,9 @@
     var book = ViewData["Book"] as BookModel;
 }
 
+@inject Tanuj.BookStore.Repository.IBookRepository _bookRepository   
+@* dependency injection*@
+
 
 <section class="jumbotron text-center">
     <div class="container">
@@ -45,6 +48,11 @@
         <p>
             <a href="#" class="btn btn-primary my-2">Search books</a>
         </p>
+        @foreach (var item in await _bookRepository.GetAllBooks())   @* directly using repository using dependency injection*@
+        {
+            <h2>@item.Title </h2>
+
+        }
     </div>
 </section>
 

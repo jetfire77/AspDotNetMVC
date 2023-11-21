@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System.Dynamic;
 using System.Net;
 using Tanuj.BookStore.Models;
@@ -7,6 +9,20 @@ namespace Tanuj.BookStore.Controllers
 {
     public class HomeController : Controller
     {
+        //private readonly IConfiguration configuration;
+
+        //public HomeController(IConfiguration _configuration)  // using dependency injection to read appsettings.json
+        //{
+        //    configuration = _configuration;
+        //}
+
+
+        private readonly NewBookAlertConfig _newBookAlertconfiguration;
+        public HomeController(IOptionsSnapshot<NewBookAlertConfig> newBookAlertconfiguration)  // using dependency injection to read appsettings.json
+        {
+            _newBookAlertconfiguration = newBookAlertconfiguration.Value;
+        }
+
         [ViewData]  // decoritating with viewdata attribute
         public string CustomProperty { get; set; }
 
@@ -16,8 +32,15 @@ namespace Tanuj.BookStore.Controllers
 
         [ViewData]
         public BookModel book { get; set; }
+
+        
         public ViewResult Index()
         {
+
+          
+
+            bool isDisplay = _newBookAlertconfiguration.DisplayNewBookAlert;
+
 
             /* ViewBag.Title = "Named Book Wanderer";
                dynamic data = new ExpandoObject();
@@ -52,6 +75,8 @@ namespace Tanuj.BookStore.Controllers
             return  View(obj);
         }
 
+
+        //[Route("about-us")]   // attribute routing
         public ViewResult AboutUs() {
 
             Title = "About us";
@@ -59,6 +84,8 @@ namespace Tanuj.BookStore.Controllers
             return View();
         }
 
+
+       
         public ViewResult ContactUs()
         {
             Title = "Contact us";

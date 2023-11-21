@@ -5,7 +5,7 @@
     ViewData["Title"] = "Add new book";
 }
 
-
+@inject Tanuj.BookStore.Repository.ILanguageRepository _languageRepo
 
 
 
@@ -99,8 +99,8 @@
 
         <div class="form-group">
             <label asp-for="LanguageId" class="control-label"></label>
-            <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.Language"  required>
-               
+            @*<select asp-for="LanguageId" class="form-control" asp-items="ViewBag.Language"  required>*@
+            <select asp-for="LanguageId" class="form-control" asp-items="(await _languageRepo.GetLanguages()).Select(x=> new SelectListItem() {Text = x.Name, Value= x.Id.ToString()})"  required>
 
                 <option value="">Please choose book language </option>
                

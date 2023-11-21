@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -12,22 +14,32 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Tanuj.BookStore.Data;
+using Tanuj.BookStore.Models;
 using Tanuj.BookStore.Repository;
 
 namespace Tanuj.BookStore
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration)   // using dependency injection. IConfiguration to access settings.json 
+        {
+            _configuration = configuration;
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-       
+
         // For adding dependencies and services
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<BookStoreContext>(options => options.UseSqlServer("Server=.;Database=BookStore1;Integrated Security=True;"));
-           
-            
+            //services.AddDbContext<BookStoreContext>(options => options.UseSqlServer("Server=.;Database=BookStore1;Integrated Security=True;"));
+            services.AddDbContext<BookStoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));  // getting connection string from appsetting.json
+
+
+            services.AddIdentity<IdentityUser, IdentityRole >().AddEntityFrameworkStores<BookStoreContext>();  // configuring identity core framework to work with database
+
             services.AddControllersWithViews();  // adding mvc design pattern
 
 
@@ -40,8 +52,11 @@ namespace Tanuj.BookStore
 
             //}); 
 #endif
-            services.AddScoped<BookRepository, BookRepository>();  // for dependency injection
-            services.AddScoped<LanguageRepository, LanguageRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();  // for dependency injection registring service in container
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+
+            services.Configure<NewBookAlertConfig>(_configuration.GetSection("NewBookAlert"));   // using Ioption to access apps.setting.json
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,7 +80,9 @@ namespace Tanuj.BookStore
           */
 
             //map a particular url to a resource
-               app.UseRouting();   
+               app.UseRouting();
+
+            app.UseAuthentication();    // using identity core framework
 
             // maping a usl to a particular resource 
                app.UseEndpoints(endpoints =>

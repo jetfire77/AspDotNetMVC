@@ -7,7 +7,7 @@ using Tanuj.BookStore.Models;
 
 namespace Tanuj.BookStore.Repository
 {
-    public class LanguageRepository
+    public class LanguageRepository : ILanguageRepository
     {
 
         private readonly BookStoreContext _context = null;
@@ -23,12 +23,12 @@ namespace Tanuj.BookStore.Repository
 
         public async Task<List<LanguageModel>> GetLanguages()
         {
-            return await _context.Language.Select(x=> new LanguageModel()
+            return await _context.Language.Select(x => new LanguageModel()
             {
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
-                   
+
 
             }).ToListAsync();
         }
