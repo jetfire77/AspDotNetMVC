@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Net;
+using System.Threading.Tasks;
 using Tanuj.BookStore.Models;
 using Tanuj.BookStore.Service;
 
@@ -20,12 +22,14 @@ namespace Tanuj.BookStore.Controllers
 
         private readonly NewBookAlertConfig _newBookAlertconfiguration;
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
 
         public HomeController(IOptionsSnapshot<NewBookAlertConfig> newBookAlertconfiguration,
-            IUserService userService)  // using dependency injection to read appsettings.json   // IUserService userService
+            IUserService userService , IEmailService emailService)  // using dependency injection to read appsettings.json   // IUserService userService
         {
             _newBookAlertconfiguration = newBookAlertconfiguration.Value;
             _userService = userService;
+            _emailService = emailService;
         }
 
         [ViewData]  // decoritating with viewdata attribute
@@ -39,8 +43,18 @@ namespace Tanuj.BookStore.Controllers
         public BookModel book { get; set; }
 
         
-        public ViewResult Index()
+        public async  Task<ViewResult> Index()
         {
+
+            UserEmailOptions options = new UserEmailOptions
+            {
+                ToEmails = new List<string>()
+                {
+                    "test@gmail.com"
+                }
+            };
+
+          await  _emailService.SendTestEmail(options);
             var userId = _userService.GetUserId(); 
             var isLoggedIn = _userService.IsAuthenticated();
           

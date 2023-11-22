@@ -74,9 +74,11 @@ namespace Tanuj.BookStore
             services.AddScoped<ILanguageRepository, LanguageRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();                              // telling application that we are using custom user claims
 
+            services.Configure<SMTPConfigModel>(_configuration.GetSection("SMTPConfig"));
             services.Configure<NewBookAlertConfig>(_configuration.GetSection("NewBookAlert"));   // using Ioption to access apps.setting.json
         }
 
