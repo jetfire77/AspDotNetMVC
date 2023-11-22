@@ -14,8 +14,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Tanuj.BookStore.Data;
+using Tanuj.BookStore.Helpers;
 using Tanuj.BookStore.Models;
 using Tanuj.BookStore.Repository;
+using Tanuj.BookStore.Service;
 
 namespace Tanuj.BookStore
 {
@@ -50,6 +52,12 @@ namespace Tanuj.BookStore
                 options.Password.RequireNonAlphanumeric = false;
             });
 
+
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = "/login";
+            });
+
             services.AddControllersWithViews();  // adding mvc design pattern
 
 
@@ -65,6 +73,9 @@ namespace Tanuj.BookStore
             services.AddScoped<IBookRepository, BookRepository>();  // for dependency injection registring service in container
             services.AddScoped<ILanguageRepository, LanguageRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();                              // telling application that we are using custom user claims
 
             services.Configure<NewBookAlertConfig>(_configuration.GetSection("NewBookAlert"));   // using Ioption to access apps.setting.json
         }
@@ -93,6 +104,8 @@ namespace Tanuj.BookStore
                app.UseRouting();
 
             app.UseAuthentication();    // using identity core framework
+
+            app.UseAuthorization();   
 
             // maping a usl to a particular resource 
                app.UseEndpoints(endpoints =>

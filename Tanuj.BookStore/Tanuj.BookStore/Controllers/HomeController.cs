@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Dynamic;
 using System.Net;
 using Tanuj.BookStore.Models;
+using Tanuj.BookStore.Service;
 
 namespace Tanuj.BookStore.Controllers
 {
@@ -18,9 +19,13 @@ namespace Tanuj.BookStore.Controllers
 
 
         private readonly NewBookAlertConfig _newBookAlertconfiguration;
-        public HomeController(IOptionsSnapshot<NewBookAlertConfig> newBookAlertconfiguration)  // using dependency injection to read appsettings.json
+        private readonly IUserService _userService;
+
+        public HomeController(IOptionsSnapshot<NewBookAlertConfig> newBookAlertconfiguration,
+            IUserService userService)  // using dependency injection to read appsettings.json   // IUserService userService
         {
             _newBookAlertconfiguration = newBookAlertconfiguration.Value;
+            _userService = userService;
         }
 
         [ViewData]  // decoritating with viewdata attribute
@@ -36,7 +41,8 @@ namespace Tanuj.BookStore.Controllers
         
         public ViewResult Index()
         {
-
+            var userId = _userService.GetUserId(); 
+            var isLoggedIn = _userService.IsAuthenticated();
           
 
             bool isDisplay = _newBookAlertconfiguration.DisplayNewBookAlert;

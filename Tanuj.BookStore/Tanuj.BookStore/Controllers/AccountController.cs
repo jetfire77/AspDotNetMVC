@@ -53,7 +53,7 @@ namespace Tanuj.BookStore.Controllers
 
         [Route("login")]
         [HttpPost]
-        public async Task<IActionResult> Login(SignInModel signInModel)
+        public async Task<IActionResult> Login(SignInModel signInModel, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +61,10 @@ namespace Tanuj.BookStore.Controllers
               var result =  await _accountRepository.PasswordSignInAsync(signInModel);
                 if (result.Succeeded)
                 {
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return LocalRedirect(returnUrl);   // return to the page on which you were going to before login in
+                    }
 
                     return RedirectToAction("Index", "Home" ); // if result is successfull than redirect to idex page of home controller
 
@@ -78,6 +82,39 @@ namespace Tanuj.BookStore.Controllers
         {
             await _accountRepository.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+
+        [Route("change-password")]
+        public  IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+           if(ModelState.IsValid) {
+
+                var result =await  _accountRepository.changePasswordAsync(model);
+                if (result.Succeeded)
+                {
+
+                    ViewBag.IsSuccess = true;
+                    ModelState.Clear();
+                    return View();
+                }
+
+                foreach(var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+            }
+              
+           
+           return View(model);
         }
 
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -60,7 +61,7 @@ namespace Tanuj.BookStore.Controllers
             return _bookRepository.SearchBook(bookName, authorName);
         }
 
-
+        [Authorize]    // to allow only loggein in user to add book
         public async Task<ViewResult> AddNewBook(bool isSuccess = false, int bookId = 0) {
 
             var model = new BookModel()

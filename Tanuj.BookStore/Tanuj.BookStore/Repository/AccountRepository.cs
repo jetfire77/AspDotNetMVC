@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Tanuj.BookStore.Models;
+using Tanuj.BookStore.Service;
 
 namespace Tanuj.BookStore.Repository
 {
@@ -9,10 +10,14 @@ namespace Tanuj.BookStore.Repository
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> SignInManager)  // injecting usermanager of  identity framework  / injecting SignInManager of  identity framework to login
+        private readonly IUserService _userService;
+
+        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> SignInManager
+            , IUserService userService)  // injecting usermanager of  identity framework  // injecting SignInManager of  identity framework to login  // injecting  userService to get detail of user
         {
             _userManager = userManager;
             _signInManager = SignInManager;
+            _userService = userService;
         }
 
         public async Task<IdentityResult> CreateUserAsync(SignUpUserModel userModel)
@@ -43,6 +48,13 @@ namespace Tanuj.BookStore.Repository
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<IdentityResult> changePasswordAsync(ChangePasswordModel model)
+        {
+            var userId = _userService.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            return await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
         }
     }
 }

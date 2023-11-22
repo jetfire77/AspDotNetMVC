@@ -12,6 +12,8 @@ namespace Tanuj.BookStore.Repository
 
         Task SignOutAsync();
 
+        Task<IdentityResult> changePasswordAsync(ChangePasswordModel model);
+
     }
 
 }
