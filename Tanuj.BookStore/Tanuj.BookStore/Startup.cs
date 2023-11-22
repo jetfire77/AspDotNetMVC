@@ -40,7 +40,7 @@ namespace Tanuj.BookStore
             services.AddDbContext<BookStoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));  // getting connection string from appsetting.json
 
 
-            services.AddIdentity<ApplicationUser, IdentityRole >().AddEntityFrameworkStores<BookStoreContext>();  // configuring identity core framework to work with database
+            services.AddIdentity<ApplicationUser, IdentityRole >().AddEntityFrameworkStores<BookStoreContext>().AddDefaultTokenProviders();  // configuring identity core framework to work with database  // AddDefaultTokenProviders() for tokken for verification
 
             services.Configure<IdentityOptions>(options =>    // customizing the default settings of  identity framewoork 
             {
@@ -50,6 +50,9 @@ namespace Tanuj.BookStore
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
+
+                options.SignIn.RequireConfirmedEmail = true;    
+
             });
 
 
@@ -74,11 +77,11 @@ namespace Tanuj.BookStore
             services.AddScoped<ILanguageRepository, LanguageRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IEmailService, EmailService>();          
 
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();                              // telling application that we are using custom user claims
 
-            services.Configure<SMTPConfigModel>(_configuration.GetSection("SMTPConfig"));
+            services.Configure<SMTPConfigModel>(_configuration.GetSection("SMTPConfig"));        // Registring SMTPConfigModel  so that we can read the configuration from Appsetting.json file
             services.Configure<NewBookAlertConfig>(_configuration.GetSection("NewBookAlert"));   // using Ioption to access apps.setting.json
         }
 

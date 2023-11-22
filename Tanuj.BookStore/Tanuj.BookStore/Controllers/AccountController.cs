@@ -69,8 +69,16 @@ namespace Tanuj.BookStore.Controllers
                     return RedirectToAction("Index", "Home" ); // if result is successfull than redirect to idex page of home controller
 
                 }
+                if(result.IsNotAllowed)
+                {
+                    ModelState.AddModelError("", "Not Allowed to Login");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid credentials");
 
-                ModelState.AddModelError("", "Invalid credentials");
+                }
+             
 
             }
             return View();

@@ -11,5 +11,7 @@ namespace Tanuj.BookStore.Models
 
         public string Body { get; set; }
 
+        public List<KeyValuePair<string, string>> PlaceHolders { get; set; }   //for passing dynamic content like username
+
     }
 }

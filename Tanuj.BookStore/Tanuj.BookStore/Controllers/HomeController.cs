@@ -51,10 +51,16 @@ namespace Tanuj.BookStore.Controllers
                 ToEmails = new List<string>()
                 {
                     "test@gmail.com"
+                },
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{UserName}}", "Tanuj kumar")
                 }
             };
 
           await  _emailService.SendTestEmail(options);
+
+
             var userId = _userService.GetUserId(); 
             var isLoggedIn = _userService.IsAuthenticated();
           
