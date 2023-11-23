@@ -9,5 +9,7 @@ namespace Tanuj.BookStore.Service
 
 
         Task SendEmailForEmailConfirmation(UserEmailOptions userEmailOptions);
+
+        Task SendEmailForForgotPassword(UserEmailOptions userEmailOptions);
     }
 }
